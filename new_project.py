@@ -1,10 +1,12 @@
-from clear_folder import clean
+from helpers import BOT_HANDLERS, INTENTS, ACTIONS
 from collections import UserDict
 from datetime import datetime
 from datetime import timedelta
+import clean
 import os
 import pathlib
 import pickle
+import random
 import re
 
 
@@ -35,9 +37,12 @@ class NameError6(Exception):
 class NameError7(Exception):
     pass
 
+class NameError8(Exception):
+    pass
+
 
 def input_error(func):
-    def inner(adress_book, com):
+    def inner(com, arg, adress_book):
         my_error_1 = "You wrote wrong the second key or it's missing"
         my_error_2 = "Wrong phone-number (must be in format XXX-XXX-XX-XX) or birthday (must be in format XX-XX-XXXX)!"
         my_error_3 = "You maked the fail by inputing the command!"
@@ -49,8 +54,9 @@ def input_error(func):
         my_error_9 = "Date of birthday in database is not exiest yet!"
         my_error_10 = "E-mail in database is not exiest yet!"
         my_error_11 = "Address of living in database is not exiest yet!"
+        my_error_12 = "You maked the fail by inputing the path to the folder!"
         try:
-            res = func(adress_book, com)
+            res = func(com, arg, adress_book)
         except KeyError:
             return my_error_1
         except ValueError:
@@ -73,6 +79,8 @@ def input_error(func):
             return my_error_10
         except NameError7:
             return my_error_11
+        except NameError8:
+            return my_error_12
         else:
             return res
 
@@ -80,85 +88,93 @@ def input_error(func):
 
 
 @input_error
-def parser(com, my_adressbook):
+def parser(com, arg, my_adressbook):
     commands = {
+        #--------------------intents--------------------
+        "exit": my_adressbook.ausgang,
+        "hello": my_adressbook.hello,
+        "help": my_adressbook.help,
+        "show": my_adressbook.showall,
+        #--------------------actions--------------------
+        "clean":clean.main,
         "add": my_adressbook.add,
         "change": my_adressbook.change,
         "delete": my_adressbook.delete,
         "find": my_adressbook.findall,
-        "hello": my_adressbook.hello,
-        "help": my_adressbook.help,
         "name": my_adressbook.findname,
         "phone": my_adressbook.findphone,
         "birthday": my_adressbook.findbirthday,
         "email": my_adressbook.findemail,
         "address": my_adressbook.findaddress,
-        "show all": my_adressbook.showall,
-        "exit": my_adressbook.ausgang,
-        "close": my_adressbook.ausgang,
-        "good bye": my_adressbook.ausgang,
     }
     arguments = {
+        #--------------------intents--------------------
+        "show": "<nothing>",
+        "hello": "<nothing>",
+        "help": "<nothing>",
+        "exit": "<nothing>",
+        #--------------------actions--------------------
+        "clean":"<the path to the folder for cleaning>",
         "add": "<name> <value>",
         "change": "<name> <old_value> <new_value>",
         "delete": "<name> <value>",
         "find": "<second_key (all, phone, birthday, email, address)> <name>",
-        "hello": "<nothing>",
-        "help": "<nothing>",
         "name": "<part or full name>",
         "phone": "<part or full phone-number>",
         "birthday": "<part or full date of birthday>",
         "email": "<part or full email>",
         "address": "<part or full address>",
-        "show all": "<nothing>",
-        "exit": "<nothing>",
-        "close": "<nothing>",
-        "good bye": "<nothing>",
     }
-
-    if com[0] == "exit" or com[0] == "close":
-        result = commands[com[0]]()
-    elif com[0] == "good" and len(com) > 1:
-        if com[1] == "bye":
-            result = commands[com[0] + " " + com[1]]()
+    #--------------------intents--------------------
+    if com in BOT_HANDLERS["intents"]["exit"]["examples"]:
+        result = commands["exit"]()
+    elif com in BOT_HANDLERS["intents"]["hello"]["examples"]:
+        result = commands["hello"]()
+    elif com in BOT_HANDLERS["intents"]["help"]["examples"]:
+        result = commands["help"](commands, arguments)
+    elif com in BOT_HANDLERS["intents"]["show"]["examples"]:
+        result = commands["show"]()
+    #--------------------actions--------------------
+    elif com in BOT_HANDLERS["actions"]["clean"]["examples"]:
+        if pathlib.Path(arg).is_dir():
+            temp_path = os.getcwd()
+            commands["clean"](arg)
+            os.chdir(temp_path)
+            result = "This folder was sorted and cleaned"
         else:
-            raise NameError1
-    elif com[0] == "add":
-        result = commands[com[0]](com[1], com[2])
-    elif com[0] == "clean":
-        # os.mkdir(com[1], exist_ok = True)
-        # if pathlib.Path(com[1]).is_dir():
-        result = "cleaning folder"
-        clean.main(com[1])
-        # else:
-        #    print("Error")
-    elif com[0] == "change":
-        result = commands[com[0]](com[1], com[2], com[3])
-    elif com[0] == "delete":
-        result = commands[com[0]](com[1], com[2])
-    elif com[0] == "find":
-        result = commands[com[0]](com[1], com[2])
-    elif com[0] == "hello":
-        result = commands[com[0]]()
-    elif com[0] == "help":
-        result = commands[com[0]](commands, arguments)
-    elif com[0] == "name":
-        result = commands[com[0]](com[1])
-    elif com[0] == "phone":
-        result = commands[com[0]](com[1])
-    elif com[0] == "birthday":
-        result = commands[com[0]](com[1])
-    elif com[0] == "email":
-        result = commands[com[0]](com[1])
-    elif com[0] == "address":
-        result = commands[com[0]](com[1])
-    elif com[0] == "show" and len(com) > 1:
-        if com[1] == "all":
-            result = commands[com[0] + " " + com[1]]()
-        else:
-            raise NameError2
+            raise NameError8
+    elif com in BOT_HANDLERS["actions"]["add"]["examples"]:
+        result = commands["add"](arg[0], arg[1])
+    elif com in BOT_HANDLERS["actions"]["change"]["examples"]:
+        result = commands["change"](arg[0], arg[1], arg[2])
+    elif com in BOT_HANDLERS["actions"]["delete"]["examples"]:
+        result = commands["delete"](arg[0], arg[1])
+    elif com in BOT_HANDLERS["actions"]["find"]["examples"]:
+        result = commands["find"](arg[0], arg[1])
+    elif com in BOT_HANDLERS["actions"]["name"]["examples"]:
+        result = commands["name"](arg[0])
+    elif com in BOT_HANDLERS["actions"]["phone"]["examples"]:
+        result = commands["phone"](arg[0])
+    elif com in BOT_HANDLERS["actions"]["birthday"]["examples"]:
+        result = commands["birthday"](arg[0])
+    elif com in BOT_HANDLERS["actions"]["email"]["examples"]:
+        result = commands["email"](arg[0])
+    elif com in BOT_HANDLERS["actions"]["address"]["examples"]:
+        result = commands["address"](arg[0])
+    elif com in BOT_HANDLERS["failure_phrases"]:
+        result = random.choice(BOT_HANDLERS['failure_phrases'])
     return result
 
+def split_command(com):
+    for intent in INTENTS:
+        for example in BOT_HANDLERS["intents"][intent]["examples"]:
+            if re.match(example, com):
+                return example, com.split(example)[0].strip()
+    for action in ACTIONS:
+        for example in BOT_HANDLERS["actions"][action]["examples"]:
+            if re.match(example, com):
+                return example, com.split(example)[1].strip()
+    return 'failure_phrases', random.choice(BOT_HANDLERS['failure_phrases'])
 
 class Adressbook(UserDict):
     def add_Record(self, name, value, type_value="phone"):
@@ -255,7 +271,9 @@ class Record(Name, Phone, Birthday, Email, Address):
         else:
             self.__add_item_phone(name, phone)
             self.data = self.change_Record(name, self.data.get(name))
-        return "added phone-number"
+        answer = random.choice(BOT_HANDLERS["actions"]["add"]["responses"])
+        temp = "I added phone-number"
+        return answer + ": " + temp
 
     def __add_birthday(self, name, birthday):
         if not self.is_name(name):
@@ -264,7 +282,10 @@ class Record(Name, Phone, Birthday, Email, Address):
         else:
             self.data[name]["birthday"] = birthday
             self.data = self.change_Record(name, self.data.get(name))
-        return str(self.day_to_birthday(name)) + " days to birthday"
+        answer = random.choice(BOT_HANDLERS["actions"]["add"]["responses"])
+        temp1 = "I added date of birthday"
+        temp2 = str(self.day_to_birthday(name)) + " days to birthday"
+        return answer + ": " + temp1 + " - " + temp2
 
     def __add_email(self, name, email):
         if not self.is_name(name):
@@ -273,7 +294,9 @@ class Record(Name, Phone, Birthday, Email, Address):
         else:
             self.__add_item_email(name, email)
             self.data = self.change_Record(name, self.data.get(name))
-        return "added email"
+        answer = random.choice(BOT_HANDLERS["actions"]["add"]["responses"])
+        temp = "I added email"
+        return answer + ": " + temp
 
     def __add_address(self, name, address):
         if not self.is_name(name):
@@ -282,7 +305,9 @@ class Record(Name, Phone, Birthday, Email, Address):
         else:
             self.data[name]["address"] = address
             self.data = self.change_Record(name, self.data.get(name))
-        return "added address"
+        answer = random.choice(BOT_HANDLERS["actions"]["add"]["responses"])
+        temp = "I added address"
+        return answer + ": " + temp
 
     def __change_phone(self, name, old_phone, new_phone):
         if self.is_name(name):
@@ -290,7 +315,9 @@ class Record(Name, Phone, Birthday, Email, Address):
                 self.data[name]["phone"].remove(old_phone)
                 self.__add_item_phone(name, new_phone)
                 self.data = self.change_Record(name, self.data.get(name))
-                return "changed phone-number"
+                answer = random.choice(BOT_HANDLERS["actions"]["change"]["responses"])
+                temp = "I changed phone-number"
+                return answer + ": " + temp
             else:
                 raise NameError4
         else:
@@ -301,7 +328,10 @@ class Record(Name, Phone, Birthday, Email, Address):
             if self.is_birthday(old_birthday):
                 self.data[name]["birthday"] = new_birthday
                 self.data = self.change_Record(name, self.data.get(name))
-                return "changed date of birthday"
+                answer = random.choice(BOT_HANDLERS["actions"]["change"]["responses"])
+                temp1 = "I changed date of birthday"
+                temp2 = str(self.day_to_birthday(name)) + " days to birthday"
+                return answer + ": " + temp1 + " - " + temp2
             else:
                 raise NameError5
         else:
@@ -313,7 +343,9 @@ class Record(Name, Phone, Birthday, Email, Address):
                 self.data[name]["email"].remove(old_email)
                 self.__add_item_email(name, new_email)
                 self.data = self.change_Record(name, self.data.get(name))
-                return "changed email"
+                answer = random.choice(BOT_HANDLERS["actions"]["change"]["responses"])
+                temp = "I changed email"
+                return answer + ": " + temp
             else:
                 raise NameError6
         else:
@@ -324,7 +356,9 @@ class Record(Name, Phone, Birthday, Email, Address):
             if self.is_address(old_address):
                 self.data[name]["address"] = new_address
                 self.data = self.change_Record(name, self.data.get(name))
-                return "changed address"
+                answer = random.choice(BOT_HANDLERS["actions"]["change"]["responses"])
+                temp = "I changed address"
+                return answer + ": " + temp
             else:
                 raise NameError7
         else:
@@ -335,7 +369,9 @@ class Record(Name, Phone, Birthday, Email, Address):
             if self.is_phone(phone):
                 self.data[name]["phone"].remove(phone)
                 self.data = self.change_Record(name, self.data.get(name))
-                return "deleted phone-number"
+                answer = random.choice(BOT_HANDLERS["actions"]["delete"]["responses"])
+                temp = "I deleted phone-number"
+                return answer + ": " + temp
             else:
                 raise NameError4
         else:
@@ -346,7 +382,9 @@ class Record(Name, Phone, Birthday, Email, Address):
             if self.is_birthday(birthday):
                 self.data[name].pop("birthday")
                 self.data = self.change_Record(name, self.data.get(name))
-                return "deleted date of birthday"
+                answer = random.choice(BOT_HANDLERS["actions"]["delete"]["responses"])
+                temp = "I deleted date of birthday"
+                return answer + ": " + temp
             else:
                 raise NameError5
         else:
@@ -357,7 +395,9 @@ class Record(Name, Phone, Birthday, Email, Address):
             if self.is_email(email):
                 self.data[name]["email"].remove(email)
                 self.data = self.change_Record(name, self.data.get(name))
-                return "deleted email"
+                answer = random.choice(BOT_HANDLERS["actions"]["delete"]["responses"])
+                temp = "I deleted email"
+                return answer + ": " + temp
             else:
                 raise NameError6
         else:
@@ -368,7 +408,9 @@ class Record(Name, Phone, Birthday, Email, Address):
             if self.is_address(address):
                 self.data[name].pop("address")
                 self.data = self.change_Record(name, self.data.get(name))
-                return "deleted address"
+                answer = random.choice(BOT_HANDLERS["actions"]["delete"]["responses"])
+                temp = "I deleted address"
+                return answer + ": " + temp
             else:
                 raise NameError7
         else:
@@ -416,20 +458,21 @@ class Record(Name, Phone, Birthday, Email, Address):
 
     def findall(self, arg, name):
         if self.is_name(name):
+            answer = random.choice(BOT_HANDLERS["actions"]["find"]["responses"])
             temp = str(self.day_to_birthday(name)) + " days to birthday"
             if arg == "all":
-                return str(self.data.get(name)) + " " + temp
+                return answer + " " + str(self.data.get(name)) + " - " + temp
             elif arg == "phone" or arg == "birthday":
-                return str(self.data.get(name).get(arg)) + " " + temp
+                return answer + " " + str(self.data.get(name).get(arg)) + " - " + temp
             elif arg == "email" or arg == "address":
-                return str(self.data.get(name).get(arg)) + " " + temp
+                return answer + " " + str(self.data.get(name).get(arg)) + " - " + temp
             else:
                 raise KeyError
         else:
             raise NameError3
 
     def hello(self):
-        return "How can I help you?"
+        return random.choice(BOT_HANDLERS["intents"]["hello"]["responses"])
 
     def showall(self):
         result = ""
@@ -439,10 +482,11 @@ class Record(Name, Phone, Birthday, Email, Address):
                 result += "\n\t\t\t" + str(next(self.iterator()))
             except KeyError:
                 self.data = pickle.loads(serialized_data)
-                return result
+                answer = random.choice(BOT_HANDLERS["intents"]["show"]["responses"])
+                return answer + " " + result
 
     def ausgang(self):
-        return "Good bye!"
+        return random.choice(BOT_HANDLERS["intents"]["exit"]["responses"])
 
     def day_to_birthday(self, name):
         my_date_str = self.data[name]["birthday"]
@@ -463,15 +507,18 @@ class Record(Name, Phone, Birthday, Email, Address):
         result = "You can to write next commands for working with me:"
         for command in commands.keys():
             result += "\n\t\t\t" + str(command) + " " + str(arguments[command])
-        return result
+        answer = random.choice(BOT_HANDLERS["intents"]["help"]["responses"])
+        return answer + " " + result
 
     def findname(self, part_name):
         result = ""
-        for elem in self.data.keys():
-            if re.findall(part_name, elem):
-                result += "\n\t\t\t" + str(elem) + " " + str(self.data[elem])
+        for name in self.data.keys():
+            if re.findall(part_name, name):
+                temp = str(self.day_to_birthday(name)) + " days to birthday"
+                result += "\n\t\t\t" + str(name) + " " + str(self.data[name]) + " - " + str(temp)
         if result:
-            return result
+            answer = random.choice(BOT_HANDLERS["actions"]["name"]["responses"])
+            return answer + " " + result
         else:
             raise NameError3
 
@@ -481,9 +528,11 @@ class Record(Name, Phone, Birthday, Email, Address):
             if "phone" in self.data[name]:
                 for elem in self.data[name]["phone"]:
                     if re.findall(part_phone, elem):
-                        result += "\n\t\t\t" + str(name) + " " + str(elem)
+                        temp = str(self.day_to_birthday(name)) + " days to birthday"
+                        result += "\n\t\t\t" + str(name) + " " + str(elem) + " - " + str(temp)
         if result:
-            return result
+            answer = random.choice(BOT_HANDLERS["actions"]["phone"]["responses"])
+            return answer + " " + result
         else:
             raise NameError4
 
@@ -494,11 +543,10 @@ class Record(Name, Phone, Birthday, Email, Address):
                 temp = self.data[name]["birthday"]
                 if re.findall(part_birthday, temp):
                     temp_str = str(self.day_to_birthday(name)) + " days to birthday"
-                    result += (
-                        "\n\t\t\t" + str(name) + " " + str(temp) + " " + str(temp_str)
-                    )
+                    result += "\n\t\t\t" + str(name) + " " + str(temp) + " - " + str(temp_str)
         if result:
-            return result
+            answer = random.choice(BOT_HANDLERS["actions"]["birthday"]["responses"])
+            return answer + " " + result
         else:
             raise NameError5
 
@@ -510,7 +558,8 @@ class Record(Name, Phone, Birthday, Email, Address):
                     if re.findall(part_email, elem):
                         result += "\n\t\t\t" + str(name) + " " + str(elem)
         if result:
-            return result
+            answer = random.choice(BOT_HANDLERS["actions"]["email"]["responses"])
+            return answer + " " + result
         else:
             raise NameError6
 
@@ -522,7 +571,8 @@ class Record(Name, Phone, Birthday, Email, Address):
                 if re.findall(part_address, temp):
                     result += "\n\t\t\t" + str(name) + " " + str(temp)
         if result:
-            return result
+            answer = random.choice(BOT_HANDLERS["actions"]["address"]["responses"])
+            return answer + " " + result
         else:
             raise NameError7
 
@@ -560,13 +610,17 @@ def main():
             my_record = pickle.load(file)
 
     print("{:>20}{:<300}".format("Your assistent: ", "Hello"))
-    while result != "Good bye!":
+    while True:
         if key == "" in my_record.data.keys():
             my_record.data.pop(key)
         command = input("{:>20}".format("User: "))
-        com = command.lower().split(" ")
-        result = parser(com, my_record)
+        kommande, argumente = split_command(command)
+        if kommande != "clean":
+            argumente = argumente.lower().split(" ")
+        result = parser(kommande, argumente, my_record)
         print("{:>20}{:<300}".format("Your assistent: ", result))
+        if result in BOT_HANDLERS["intents"]["exit"]["responses"]:
+            break
 
     with open("my.bin", "wb") as file:
         pickle.dump(my_record, file, 5)
