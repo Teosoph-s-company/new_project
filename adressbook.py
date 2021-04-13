@@ -1,6 +1,7 @@
 from collections import UserDict
 from datetime import datetime, timedelta
 from helpers import BOT_HANDLERS, INTENTS, ACTIONS, TAGS
+from prettytable import PrettyTable
 import pickle
 import random
 import re
@@ -53,11 +54,6 @@ class Adressbook(UserDict):
     def change_Record(self, name, value):
         self.data.update({name: value})
         return self.data
-
-    def iterator(self):
-        item = self.data.popitem()
-        yield str(item)
-
 
 class Field(Adressbook):
     def __init__(self):
@@ -433,15 +429,35 @@ class Record(Name, Phone, Birthday, Email, Address, Notes):
         return random.choice(BOT_HANDLERS["intents"]["hello"]["responses"])
 
     def showall(self):
-        result = ""
-        serialized_data = pickle.dumps(self.data, 5)
-        while True:
-            try:
-                result += "\n\t\t\t" + str(next(self.iterator()))
-            except KeyError:
-                self.data = pickle.loads(serialized_data)
-                answer = random.choice(BOT_HANDLERS["intents"]["show"]["responses"])
-                return answer + " " + result
+        tabl_head = ['name', 'phone', 'birthday', 'email', 'address', 'notes']
+        table = PrettyTable(tabl_head)
+        for name, values in self.data.items():
+            tabl = ['', '', '', '', '', '']
+            tabl[0] = name
+            for key, value in values.items():
+                if key == "phone":
+                    _phone = ''
+                    for phone in value:
+                        _phone += f"{phone}\n"
+                    tabl[1] = _phone
+                elif key == "birthday":
+                    tabl[2] = value
+                elif key == "email":
+                    _email = ''
+                    for email in value:
+                        _email += f"{email}\n"
+                    tabl[3] = _phone
+                elif key == "address":
+                    tabl[4] = value
+                elif key == "notes":
+                    _note = ''
+                    for note in value:
+                        _note += f"{note}\n"
+                    tabl[5] = _note
+            table.add_row(tabl)
+            tabl.clear()
+        answer = random.choice(BOT_HANDLERS["intents"]["show"]["responses"])
+        return answer + "\n" + table.get_string(title="Full client's databases")
 
     def ausgang(self):
         return random.choice(BOT_HANDLERS["intents"]["exit"]["responses"])
