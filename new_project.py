@@ -84,6 +84,7 @@ def parser(com, arg, my_adressbook):
         "email": my_adressbook.findemail,
         "address": my_adressbook.findaddress,
         "people":my_adressbook.givepeoplebirthday,
+        "search": my_adressbook.search,
     }
     arguments = {
         #--------------------intents--------------------
@@ -107,6 +108,7 @@ def parser(com, arg, my_adressbook):
         "email": "<part or full email>",
         "address": "<part or full address>",
         "people":"<number>",
+        "search": "<any>",
     }
     #--------------------intents--------------------
     if com in BOT_HANDLERS["intents"]["exit"]["examples"]:
@@ -126,6 +128,8 @@ def parser(com, arg, my_adressbook):
             result = "This folder was sorted and cleaned"
         else:
             raise NameError8
+    elif com in BOT_HANDLERS["actions"]["search"]["examples"]:
+        result = commands["search"](arg[0])
     elif com in BOT_HANDLERS["actions"]["addcontact"]["examples"]:
         result = commands["addcontact"](arg[0], arg[1])
     elif com in BOT_HANDLERS["actions"]["addnotes"]["examples"]:
@@ -180,6 +184,9 @@ def main():
         "petrov": {
             "phone": ["098-333-44-44", "063-999-45-56"],
             "birthday": "07-03-1983",
+            "email": "petrov@gmail.com",
+            "address": "Minsk, Pushkin st, 5",
+            "notes": ["event: daughther bd party", "allergy: milk, nuts", "preference: ponny"],
         },
         "sidorov": {
             "phone": ["050-444-55-66"],

@@ -428,12 +428,12 @@ class Record(Name, Phone, Birthday, Email, Address, Notes):
     def hello(self):
         return random.choice(BOT_HANDLERS["intents"]["hello"]["responses"])
 
-    def showall(self):
+    def datatable(self, data):
         tabl_head = ['name', 'phone', 'birthday', 'email', 'address', 'notes']
         table = PrettyTable(tabl_head)
-        for name, values in self.data.items():
+        for name, values in data.items():
             tabl = ['', '', '', '', '', '']
-            tabl[0] = name
+            tabl[0] = name.capitalize()
             for key, value in values.items():
                 if key == "phone":
                     _phone = ''
@@ -456,8 +456,24 @@ class Record(Name, Phone, Birthday, Email, Address, Notes):
                     tabl[5] = _note
             table.add_row(tabl)
             tabl.clear()
+        return table.get_string(title="Client's database")
+
+    def showall(self):
         answer = random.choice(BOT_HANDLERS["intents"]["show"]["responses"])
-        return answer + "\n" + table.get_string(title="Full client's databases")
+        return answer + "\n" + self.datatable(self.data)
+
+    def search(self, contact):
+        if contact[0] == "#":
+            contact = contact[1:]
+        Search_result = {}
+        for key, value in self.data.items():
+            act_1 = re.search(str(contact.lower()), str(value).lower())
+            act_2 = re.search(str(contact.lower()), str(key).lower())
+            if act_1 or act_2:
+                Search_result[key.capitalize()] = value
+        if Search_result == {}:
+            return "Nothig has found"
+        return self.datatable(Search_result)
 
     def ausgang(self):
         return random.choice(BOT_HANDLERS["intents"]["exit"]["responses"])
