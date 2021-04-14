@@ -484,17 +484,17 @@ class Record(Name, Phone, Birthday, Email, Address, Notes):
         answer = random.choice(BOT_HANDLERS["intents"]["help"]["responses"])
         return answer + " " + result
 
-    def givepeaplebirthday(self, number):
+    def givepeoplebirthday(self, number):
         result = ""
         for name in self.data.keys():
             if self.day_to_birthday(name) in range(int(number)):
                 temp = str(self.day_to_birthday(name)) + " days to birthday"
                 result += "\n\t\t\t" + str(name) + " " + str(self.data[name]) + " - " + str(temp)
         if result:
-            answer = random.choice(BOT_HANDLERS["actions"]["peaple"]["responses"])
+            answer = random.choice(BOT_HANDLERS["actions"]["people"]["responses"])
             return answer + " " + result + " " + temp
         else:
-            return "No peaple"
+            return "No people"
 
     def findname(self, part_name):
         result = ""

@@ -83,7 +83,7 @@ def parser(com, arg, my_adressbook):
         "birthday": my_adressbook.findbirthday,
         "email": my_adressbook.findemail,
         "address": my_adressbook.findaddress,
-        "peaple":my_adressbook.givepeaplebirthday,
+        "people":my_adressbook.givepeoplebirthday,
     }
     arguments = {
         #--------------------intents--------------------
@@ -106,7 +106,7 @@ def parser(com, arg, my_adressbook):
         "birthday": "<part or full date of birthday>",
         "email": "<part or full email>",
         "address": "<part or full address>",
-        "peaple":"<number>",
+        "people":"<number>",
     }
     #--------------------intents--------------------
     if com in BOT_HANDLERS["intents"]["exit"]["examples"]:
@@ -152,8 +152,8 @@ def parser(com, arg, my_adressbook):
         result = commands["email"](arg[0])
     elif com in BOT_HANDLERS["actions"]["address"]["examples"]:
         result = commands["address"](arg[0])
-    elif com in BOT_HANDLERS["actions"]["peaple"]["examples"]:
-        result = commands["peaple"](arg[0])
+    elif com in BOT_HANDLERS["actions"]["people"]["examples"]:
+        result = commands["people"](arg[0])
     elif com in BOT_HANDLERS["failure_phrases"] or com == None:
         result = random.choice(BOT_HANDLERS['failure_phrases'])
     return result
