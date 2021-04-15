@@ -77,7 +77,7 @@ def parser(com, arg, my_adressbook):
         "birthday": my_adressbook.findbirthday,
         "email": my_adressbook.findemail,
         "address": my_adressbook.findaddress,
-        "people":my_adressbook.givepeoplebirthday,
+        "nearbirthday":my_adressbook.givepeoplebirthday,
         "search": my_adressbook.search,
     }
     arguments = {
@@ -101,7 +101,7 @@ def parser(com, arg, my_adressbook):
         "birthday": "<part or full date of birthday>",
         "email": "<part or full email>",
         "address": "<part or full address>",
-        "people":"<number>",
+        "nearbirthday":"<number>",
         "search": "<any>",
     }
     #--------------------intents--------------------
@@ -150,8 +150,8 @@ def parser(com, arg, my_adressbook):
         result = commands["email"](arg[0])
     elif com in BOT_HANDLERS["actions"]["address"]["examples"]:
         result = commands["address"](arg[0])
-    elif com in BOT_HANDLERS["actions"]["people"]["examples"]:
-        result = commands["people"](arg[0])
+    elif com in BOT_HANDLERS["actions"]["nearbirthday"]["examples"]:
+        result = commands["nearbirthday"](arg[0])
     elif com in BOT_HANDLERS["failure_phrases"] or com == None:
         result = random.choice(BOT_HANDLERS['failure_phrases'])
     return result
@@ -178,7 +178,7 @@ def main():
         "petrov": {
             "phone": ["098-333-44-44", "063-999-45-56"],
             "birthday": "07-03-1983",
-            "email": "petrov@gmail.com",
+            "email": ["petrov@gmail.com"],
             "address": "Minsk, Pushkin st, 5",
             "notes": ["event: daughther bd party", "allergy: milk, nuts", "preference: ponny"],
         },
@@ -203,7 +203,7 @@ def main():
         with open("addressbook.bin", "rb") as file:
             my_record = pickle.load(file)
 
-    print("{:>20}{:<300}".format("Your assistent: ", "Hello"))
+    print("{:>20}{:<300}".format("Your assistent: ", "Hello! Hope you are fine! Input <help> for get an instruction"))
     while True:
         if key == "" in my_record.data.keys():
             my_record.data.pop(key)
