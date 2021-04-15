@@ -126,3 +126,28 @@ Below you will find all the commands that I can perform for you:
         "Выспись",
         ]
     }
+
+COM_HELP = {
+        #--------------------intents--------------------
+        "show": "<nothing>",
+        "hello": "<nothing>",
+        "help": "<nothing>",
+        "exit": "<nothing>",
+        #--------------------actions--------------------
+        "clean":"<the path to the folder for cleaning>",
+        "addcontact": "<name> <value>",
+        "addnotes": "<name> <tag> <value>",
+        "changecontact": "<name> <old_value> <new_value>",
+        "changenotes": "<name> <tag> <old_value> <new_value>",
+        "deletecontact": "<name> <value>",
+        "deletenotes": "<name> <tag> <value>",
+        "findcontact": "<second_key (all, phone, birthday, email, address, notes)> <name>",
+        "findbytag":f"<tag {TAGS}>",
+        "name": "<part or full name>",
+        "phone": "<part or full phone-number>",
+        "birthday": "<part or full date of birthday>",
+        "email": "<part or full email>",
+        "address": "<part or full address>",
+        "people":"<number>",
+        "search": "<any>",
+    }
