@@ -50,8 +50,7 @@ And of course Addy itself is open source with a public repository on GitHub.
 
 ## Installation
 
-```sh
-Install: 
+```sh 
 python3 -m venv virtual_environment 
 source virtual_environment/bin/activate 
 pip install prettytable 
