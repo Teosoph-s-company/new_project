@@ -1,4 +1,4 @@
-from adressbook import Record, NameError1, NameError2, NameError3, NameError4, NameError5, NameError6, NameError7, NameError8, NameError9, NameError10
+from adressbook import Record, NameError1, NameError2, NameError3, NameError4, NameError5, NameError6, NameError7, NameError8
 from helpers import BOT_HANDLERS, INTENTS, ACTIONS, TAGS
 import clean
 import os
@@ -10,20 +10,18 @@ import re
 
 def input_error(func):
     def inner(com, arg, adress_book):
-        my_error_1 = "You wrote wrong the second key or it's missing"
-        my_error_2 = "Wrong phone-number (must be in format XXX-XXX-XX-XX), or birthday (must be in format XX-XX-XXXX), or e-mail, or address!"
-        my_error_3 = "You maked the fail by inputing the command!"
-        my_error_4 = "You maked the fail by inputing the number of arguments!"
-        my_error_5 = "You wrote wrong the compound commmnd 'good bye'!"
-        my_error_6 = "You wrote wrong the compound command 'show all'!"
-        my_error_7 = "Missing name in database!"
-        my_error_8 = "Phone-number in database is not exiest yet!"
-        my_error_9 = "Date of birthday in database is not exiest yet!"
-        my_error_10 = "E-mail in database is not exiest yet!"
-        my_error_11 = "Address of living in database is not exiest yet!"
-        my_error_12 = "You maked the fail by inputing the path to the folder!"
-        my_error_13 = "Missing note in database!"
-        my_error_14 = "Missing tag in database!"
+        my_error_1 = "You wrote wrong the second key or it's missing\t" + random.choice(BOT_HANDLERS['failure_phrases'])
+        my_error_2 = "Wrong phone-number (must be in format XXX-XXX-XX-XX), or birthday (must be in format XX-XX-XXXX), or e-mail, or address!\t" + random.choice(BOT_HANDLERS['failure_phrases'])
+        my_error_3 = "You maked the fail by inputing the command!\t" + random.choice(BOT_HANDLERS['failure_phrases'])
+        my_error_4 = "You maked the fail by inputing the number of arguments!\t" + random.choice(BOT_HANDLERS['failure_phrases'])
+        my_error_5 = "Missing note in database!\t" + random.choice(BOT_HANDLERS['failure_phrases'])
+        my_error_6 = "Missing tag in database!\t" + random.choice(BOT_HANDLERS['failure_phrases'])
+        my_error_7 = "Missing name in database!\t" + random.choice(BOT_HANDLERS['failure_phrases'])
+        my_error_8 = "Phone-number in database is not exiest yet!\t" + random.choice(BOT_HANDLERS['failure_phrases'])
+        my_error_9 = "Date of birthday in database is not exiest yet!\t" + random.choice(BOT_HANDLERS['failure_phrases'])
+        my_error_10 = "E-mail in database is not exiest yet!\t" + random.choice(BOT_HANDLERS['failure_phrases'])
+        my_error_11 = "Address of living in database is not exiest yet!\t" + random.choice(BOT_HANDLERS['failure_phrases'])
+        my_error_12 = "You maked the fail by inputing the path to the folder!\t" + random.choice(BOT_HANDLERS['failure_phrases'])
         try:
             res = func(com, arg, adress_book)
         except KeyError:
@@ -50,10 +48,6 @@ def input_error(func):
             return my_error_11
         except NameError8:
             return my_error_12
-        except NameError9:
-            return my_error_13
-        except NameError10:
-            return my_error_14
         else:
             return res
 

@@ -37,12 +37,6 @@ class NameError7(Exception):
 class NameError8(Exception):
     pass
 
-class NameError9(Exception):
-    pass
-
-class NameError10(Exception):
-    pass
-
 class Adressbook(UserDict):
     def add_Record(self, name, value, type_value="phone"):
         if self.data == dict():
@@ -261,7 +255,7 @@ class Record(Name, Phone, Birthday, Email, Address, Notes):
                 temp = "I changed note"
                 return answer + ": " + temp
             else:
-                raise NameError9
+                raise NameError1
         else:
             raise NameError3
 
@@ -342,7 +336,7 @@ class Record(Name, Phone, Birthday, Email, Address, Notes):
                     self.data.pop(name)
                 return answer + ": " + temp
             else:
-                raise NameError9
+                raise NameError1
         else:
             raise NameError3
 
@@ -365,7 +359,7 @@ class Record(Name, Phone, Birthday, Email, Address, Notes):
             self.value = "{}:{}".format(tag, value)
             return self.__add_notes(name, self.value)
         else:
-            raise NameError10
+            raise NameError2
 
     def changecontact(self, name, old_value, new_value):
         self.value = new_value
@@ -386,7 +380,7 @@ class Record(Name, Phone, Birthday, Email, Address, Notes):
             self.value = "{}:{}".format(tag, new_value)
             return self.__change_notes(name, temp_value, self.value)
         else:
-            raise NameError10
+            raise NameError2
 
     def deletecontact(self, name, value):
         self.value = value
@@ -406,7 +400,7 @@ class Record(Name, Phone, Birthday, Email, Address, Notes):
             self.value = "{}:{}".format(tag, value)
             return self.__delete_notes(name, self.value)
         else:
-            raise NameError10
+            raise NameError2
 
     def findcontact(self, arg, name):
         if self.is_name(name):
@@ -599,4 +593,4 @@ class Record(Name, Phone, Birthday, Email, Address, Notes):
             answer = random.choice(BOT_HANDLERS["actions"]["findbytag"]["responses"])
             return answer + " " + result
         else:
-            raise NameError9
+            raise NameError1
