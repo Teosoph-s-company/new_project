@@ -111,9 +111,9 @@ Below you will find all the commands that I can perform for you:
             "examples":["people", "give me people"],
             "responses":["OK", "Look here", "Sure", "You got it"]
         },
-        'search': {
-            'examples':['search'],
-            'responses':['I could find it', 'Look here', 'Sure', 'You got it', 'Look below']
+        "search": {
+            "examples":["search"],
+            "responses":["I could find it", "Look here", "Sure", "You got it", "Look below"]
         },
     },
     "failure_phrases": [

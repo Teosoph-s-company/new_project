@@ -472,7 +472,8 @@ class Record(Name, Phone, Birthday, Email, Address, Notes):
                 Search_result[key.capitalize()] = value
         if Search_result == {}:
             return "Nothig has found"
-        return self.datatable(Search_result)
+        answer = random.choice(BOT_HANDLERS["actions"]["search"]["responses"])
+        return answer + "\n" + self.datatable(Search_result)
 
     def ausgang(self):
         return random.choice(BOT_HANDLERS["intents"]["exit"]["responses"])
