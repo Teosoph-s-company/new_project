@@ -1,8 +1,8 @@
 import random
 
 INTENTS = ["exit", "help", "hello", "show"]
-ACTIONS = ["search", "clean", "addcontact",  "addnotes", "changecontact", "changenotes", "deletecontact", "deletenotes", "findcontact", "findbytag", "name", "phone", "birthday", "address", "peaple"]
-TAGS = ["raider", "allergy", "special"]
+ACTIONS = ["search", "clean", "addcontact",  "addnotes", "changecontact", "changenotes", "deletecontact", "deletenotes", "findcontact", "findbytag", "name", "phone", "birthday", "address", "people"]
+TAGS = ["raider", "allergy", "special", "event", "preference"]
     
 BOT_HANDLERS = {
     "intents": {
@@ -38,10 +38,11 @@ Below you will find all the commands that I can perform for you:
 ⦁	12. find contact notes John - I'll show you notes about user and in how many days the contact"s birthday will be.
 ⦁	13. find by tag <tag> - I'll show you notes about all users by tag and in how many days the contact"s birthday will be.
 ⦁	14. name, phone, birthday, email or address {value} - I'll show you the {value} contacts from the addressbook by partdat about one or more users by a few digits of the phone number or letters of the name
-⦁	15. peaple {number} - search peaple, who birth for {number} days
+⦁	15. people {number} - search people, who birth for {number} days
 ⦁	16. addnotes {name} {tag} {note} - I'll add note by tag
 ⦁	17. changenotes {name} {tag} {old_note} (new_note) - I'll change note by tag
 ⦁	18. deletenotes {name} {tag} {note} - I'll delete note by tag
+⦁	19. search {value} - search what do you need, if I contain it, I`ll show you
                         """]
         },
         "show": {
@@ -106,13 +107,13 @@ Below you will find all the commands that I can perform for you:
             "examples":["address", "show me address", "could you show me some address", "please show me address"],
             "responses":["OK", "Look here", "Sure", "You got it"]
         },
-        "peaple": {
-            "examples":["peaple", "give me peaple"],
+        "people": {
+            "examples":["people", "give me people"],
             "responses":["OK", "Look here", "Sure", "You got it"]
         },
         'search': {
             'examples':['search'],
-            'responses':['I could find it', 'Look here', 'Sure', 'You got it', 'Look bellow']
+            'responses':['I could find it', 'Look here', 'Sure', 'You got it', 'Look below']
         },
     },
     "failure_phrases": [

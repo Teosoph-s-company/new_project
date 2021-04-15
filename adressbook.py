@@ -412,14 +412,19 @@ class Record(Name, Phone, Birthday, Email, Address, Notes):
         if self.is_name(name):
             answer = random.choice(BOT_HANDLERS["actions"]["findcontact"]["responses"])
             temp = str(self.day_to_birthday(name)) + " days to birthday"
+            args = ('phone', 'birthday', 'email', 'address', 'notes')
             if arg == "all":
-                return answer + " : " + f"{name} have " + str(self.data.get(name)) + " - " + temp
-            elif arg == "phone" or arg == "birthday":
-                return answer + " : " + f"{name} have " + str(self.data.get(name).get(arg)) + " - " + temp
-            elif arg == "email" or arg == "address":
-                return answer + " : " + f"{name} have " + str(self.data.get(name).get(arg)) + " - " + temp
-            elif arg == "notes":
-                return answer + " : " + f"{name} have " + str(self.data.get(name).get(arg)) + " - " + temp
+                return f"\n {answer}:\n Just reminder, {name.capitalize()} has {temp}\n" + self.datatable({name:self.data.get(name)})
+            elif [i for i in args if i == arg] == [arg]:
+                tab = PrettyTable(["name", arg])
+                if type(self.data.get(name).get(arg)) == list:
+                    _arg = ''
+                    for a in self.data.get(name).get(arg):
+                        _arg += f"{a}\n"
+                    tab.add_row([name.capitalize(), _arg])
+                else:
+                    tab.add_row([name.capitalize(), self.data.get(name).get(arg)])
+                return answer + "\n" + tab.get_string(title=f"{name.capitalize()} has {temp}")
             else:
                 raise KeyError
         else:
@@ -502,13 +507,15 @@ class Record(Name, Phone, Birthday, Email, Address, Notes):
 
     def givepeoplebirthday(self, number):
         result = ""
+        bd = {}
         for name in self.data.keys():
             if self.day_to_birthday(name) in range(int(number)):
                 temp = str(self.day_to_birthday(name)) + " days to birthday"
-                result += "\n\t\t\t" + str(name) + " " + str(self.data[name]) + " - " + str(temp)
+                bd[name.capitalize()] = self.data[name]
+                result += f"\n{str(name.capitalize())} - {str(temp)}"
         if result:
             answer = random.choice(BOT_HANDLERS["actions"]["people"]["responses"])
-            return answer + " " + result + " " + temp
+            return f"{answer}\n {result}\n {self.datatable(bd)}"
         else:
             return "No people"
 

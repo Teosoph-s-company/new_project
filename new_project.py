@@ -218,7 +218,7 @@ def main():
         if kommande not in BOT_HANDLERS["actions"]["clean"]["examples"]:
             argumente = argumente.lower().split(" ")
         result = parser(kommande, argumente, my_record)
-        print("{:>20}".format("Your assistent: "), result)
+        print("{:>20}".format(f"Your assistant:"), result)
         if result in BOT_HANDLERS["intents"]["exit"]["responses"]:
             break
 
