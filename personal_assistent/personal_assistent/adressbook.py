@@ -589,7 +589,7 @@ class Record(Name, Phone, Birthday, Email, Address, Notes):
                 for elem in self.data[name]["notes"]:
                     if re.findall(tag, elem):
                         temp = str(self.day_to_birthday(name)) + " days to birthday"
-                        result += "\n\t\t\t" + str(name) + " " + str(elem) + " - " + str(temp) + " by " + str(tag)
+                        result += "\n\t\t\t" + str(name) + " " + str(elem) + " - " + str(temp)
         if result:
             answer = random.choice(BOT_HANDLERS["actions"]["findbytag"]["responses"])
             return answer + " " + result
