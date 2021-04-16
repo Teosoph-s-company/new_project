@@ -54,7 +54,13 @@ And of course Addy itself is open source with a public repository on GitHub.
 python3 -m venv virtual_environment 
 source virtual_environment/bin/activate 
 pip install prettytable 
-pip personal_assistent
+pip install -e personal_assistent
+mkdir virtual_environment/lib/python3.8/site-packages/additional_pack/
+cp personal_assistent/personal_assistent/clean.py virtual_environment/lib/python3.8/site-packages/additional_pack/clean.py
+cp personal_assistent/personal_assistent/helpers.py virtual_environment/lib/python3.8/site-packages/additional_pack/helpers.py
+cp personal_assistent/personal_assistent/adressbook.py virtual_environment/lib/python3.8/site-packages/additional_pack/adressbook.py
+cp personal_assistent/personal_assistent/__init__.py virtual_environment/lib/python3.8/site-packages/additional_pack/__init__.py
+run "event_agency" in terminal
 ```
 
 ## License
