@@ -44,7 +44,7 @@ Below you will find all the commands that I can perform for you:
 
 Addy uses:
 
-- Python 
+- Python 3.8
 
 And of course Addy itself is open source with a public repository on GitHub.
 

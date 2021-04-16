@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="personal_assistent",
-    version="1.0",
+    version="1.0.0",
     author="Teosoph's company (Teosoph, Tatsiana, Violet)",
     email="teosoph@hotmail.com, tt1846641@gmail.com, violettalozova@gmail.com",
     entry_points={
