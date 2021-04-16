@@ -8,6 +8,7 @@ setup(
     entry_points={
         "console_scripts": [
             "event_agency=personal_assistent.new_project.py:main",
+            "clean=personal_assistent.clean.py:main",
         ]
     },
     packages=find_packages(),
