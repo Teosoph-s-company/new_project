@@ -7,6 +7,12 @@ personal_assistent/personal_assistent.egg-info/entry_points.txt
 personal_assistent/personal_assistent.egg-info/PKG-INFO
 personal_assistent/personal_assistent.egg-info/SOURCES.txt
 personal_assistent/personal_assistent.egg-info/top_level.txt
+personal_assistent/personal_assistent/__pycache__/__init__.cpython-38.pyc
+personal_assistent/personal_assistent/__pycache__/adressbook.cpython-38.pyc
+personal_assistent/personal_assistent/__pycache__/clean.cpython-38.py
+personal_assistent/personal_assistent/__pycache__/helpers.cpython-38.pyc
+personal_assistent/personal_assistent/__pycache__/new_project.cpython-38.pyc
+personal_assistent/personal_assistent/__pycache__/test.cpython-38.pyc
 test.py
 addressbook.bin
 virtual_environment
