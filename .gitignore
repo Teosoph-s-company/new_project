@@ -7,5 +7,6 @@ personal_assistent/personal_assistent.egg-info/entry_points.txt
 personal_assistent/personal_assistent.egg-info/PKG-INFO
 personal_assistent/personal_assistent.egg-info/SOURCES.txt
 personal_assistent/personal_assistent.egg-info/top_level.txt
+test.py
 addressbook.bin
 virtual_environment
