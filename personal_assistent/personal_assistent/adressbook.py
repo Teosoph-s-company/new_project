@@ -1,6 +1,6 @@
 from collections import UserDict
 from datetime import datetime, timedelta
-from helpers import BOT_HANDLERS, INTENTS, ACTIONS, TAGS
+from .helpers import BOT_HANDLERS, INTENTS, ACTIONS, TAGS
 from prettytable import PrettyTable
 import pickle
 import random

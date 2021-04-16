@@ -7,8 +7,8 @@ setup(
     email="teosoph@hotmail.com, tt1846641@gmail.com, violettalozova@gmail.com",
     entry_points={
         "console_scripts": [
-            "event_agency=personal_assistent.new_project.py:main",
-            "personal_assistent=personal_assistent.test.py:main",
+            "event_agency=personal_assistent.new_project:main",
+            "mytest=personal_assistent.test:main",
         ]
     },
     packages=find_packages(),

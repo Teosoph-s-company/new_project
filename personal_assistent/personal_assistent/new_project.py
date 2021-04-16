@@ -1,6 +1,9 @@
-from adressbook import Record, NameError1, NameError2, NameError3, NameError4, NameError5, NameError6, NameError7, NameError8
-from helpers import BOT_HANDLERS, INTENTS, ACTIONS, TAGS
-import clean
+from additional_pack import helpers
+from additional_pack import clean
+from additional_pack import adressbook
+from .adressbook import Record, NameError1, NameError2, NameError3, NameError4, NameError5, NameError6, NameError7, NameError8
+from .helpers import BOT_HANDLERS, INTENTS, ACTIONS, TAGS
+from .clean import inputing, outputing, sorting, normalize, copyring, moving, creating_dir, deleting_space_dir
 import os
 import pathlib
 import pickle
